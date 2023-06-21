@@ -1,5 +1,6 @@
 import React from "react";
 import './App.css';
+import refreshIcon from "./arrows-rotate-solid.svg";
 
 class App extends React.Component {
   constructor() {
@@ -8,7 +9,8 @@ class App extends React.Component {
       quotes: {}
     }
   }
-  componentDidMount() {
+
+  fetchAPI = () => {
     fetch("https://api.breakingbadquotes.xyz/v1/quotes")
     .then(response => {
       if (!response.ok) { return false }
@@ -20,23 +22,23 @@ class App extends React.Component {
       })
     }).catch(e => console.log('error' + e))
   }
+  refresh = () => {
+    this.fetchAPI()
+  }
+  componentDidMount() {
+    this.fetchAPI()
+  }
   render() {
+    const {quote, author} = this.state.quotes
     return (
       <div className="App">
         <header className="App-header">
   
           <p>
-            " {this.state.quotes.quote} " <br></br>
-            - {this.state.quotes.author}
+            " {quote} " <br></br>
+            - {author}
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Refresh
-          </a>
+          <button className="refreshButton"  onClick={() => this.refresh()}><img className="refreshButton__icon" alt="refresh icon" src={refreshIcon}></img></button>
         </header>
       </div>
     );
